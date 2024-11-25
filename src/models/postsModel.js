@@ -22,3 +22,19 @@ export async function criarPost(novoPost) {
     return colecao.insertOne(novoPost);
 
 }
+
+export async function uploadImagem(req, res){
+    try {
+        console.log(req.file); // *** CRUCIAL DEBUGGING STEP ***
+
+        const imagePath = req.file.path; // Use the full path!
+        const novoPost = req.body;
+        novoPost.imagem = imagePath; 
+
+        const postCriado = await criarPost(novoPost);
+        res.status(200).json(postCriado); 
+    } catch (error) {
+        console.error("Upload error:", error); // Better error logging
+        res.status(500).json({ error: error.message });
+    }
+}
